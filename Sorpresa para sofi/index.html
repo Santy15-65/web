@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>💕Regalo de Mesiversario 💕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #9cbdfa, #6f8cff, #7c96ff);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .contador {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 25px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      border: 3px solid #9cbdfa;
+      backdrop-filter: blur(5px);
+    }
+
+    .contador h2 {
+      color: #ff5c8d;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .tiempo-restante {
+      color: #ff5c8d;
+      font-weight: 700;
+      font-size: 22px;
+      margin: 15px 0;
+      min-height: 30px;
+    }
+
+    .contador-fecha {
+      color: #6f8cff;
+      font-weight: 600;
+      font-size: 18px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px dashed #9cbdfa;
+    }
+
+    .boton {
+      background: linear-gradient(45deg, #9cbdfa, #6f8cff);
+      color: white;
+      border: none;
+      padding: 22px 40px;
+      font-size: 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(255, 92, 141, 0.4);
+      font-weight: 700;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+    }
+
+    .boton:disabled {
+      background: linear-gradient(45deg, #cccccc, #999999);
+      cursor: not-allowed;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .boton:not(:disabled):hover {
+      transform: translateY(-5px);
+      background: linear-gradient(45deg, #ff8fab, #ff5c8d);
+    }
+
+    .texto-boton {
+      font-size: 24px;
+    }
+
+    .contador-boton {
+      font-size: 18px;
+      margin-top: 8px;
+    }
+
+    .contador-boton.espera {
+      color: #ffeb3b;
+    }
+
+    .contador-boton.listo {
+      color: #a5ffa5;
+      animation: parpadeo 1.5s infinite alternate;
+    }
+
+    @keyframes parpadeo {
+      from { opacity: 0.7; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+  <div class="contador">
+    <h2>🫣 Tiempo Restante 🫣</h2>
+    <div class="tiempo-restante" id="tiempoRestante">Calculando...</div>
+    <div class="contador-fecha" id="fechaObjetivo"></div>
+  </div>
+
+  <button id="boton" class="boton" disabled>
+    <span class="texto-boton">Toca esperar amor 😵‍💫</span>
+    <span class="contador-boton espera" id="estadoBoton"></span>
+  </button>
+
+</div>
+
+<script>
+  // ⏰ FECHA EXACTA: 16/01/2026 A LAS 00:00
+  const fechaObjetivo = new Date(2026, 0, 16, 0, 0, 0);
+
+  const boton = document.getElementById('boton');
+  const tiempoRestanteElem = document.getElementById('tiempoRestante');
+  const estadoBotonElem = document.getElementById('estadoBoton');
+  const fechaObjetivoElem = document.getElementById('fechaObjetivo');
+
+  fechaObjetivoElem.textContent =
+    `Nuestro mesiversario: ${fechaObjetivo.toLocaleDateString('es-ES')}`;
+
+  function formatearTiempo(ms) {
+    const s = Math.floor(ms / 1000);
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const seg = s % 60;
+    return `${d}d ${h}h ${m}m ${seg}s`;
+  }
+
+  function actualizarContador() {
+    const ahora = new Date();
+    const diferencia = fechaObjetivo - ahora;
+
+    if (diferencia > 0) {
+      tiempoRestanteElem.textContent = formatearTiempo(diferencia);
+      boton.disabled = true;
+      estadoBotonElem.textContent = `Espera ${formatearTiempo(diferencia)}`;
+      estadoBotonElem.className = 'contador-boton espera';
+    } else {
+      tiempoRestanteElem.textContent = 'Vaya por su regalo bebé 💞';
+      boton.disabled = false;
+      boton.querySelector('.texto-boton').textContent = 'Tócame 🙈';
+      estadoBotonElem.textContent = 'Está listo tu regalo chopi 💝';
+      estadoBotonElem.className = 'contador-boton listo';
+    }
+  }
+
+  actualizarContador();
+  setInterval(actualizarContador, 1000);
+
+  boton.addEventListener('click', () => {
+    if (!boton.disabled) {
+      setTimeout(() => {
+        window.location.href = 'regalo.html';
+      }, 800);
+    }
+  });
+</script>
+
+</body>
+</html>
